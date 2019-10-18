@@ -4,7 +4,7 @@ const controller = require('../../controllers/employees.controller');
 const {
   createEmployees,
   updateEmployees,
-  listEmployees
+  listEmployees,
 } = require('../../validations/employees.validation');
 
 const router = express.Router();
@@ -67,7 +67,7 @@ router
    * @apiError (Forbidden 403)    Forbidden    Only user with same id or admins can modify the data
    * @apiError (Not Found 404)    NotFound     Employees does not exist
    */
-  .patch(validate(updateEmployees), controller.update)
+  .patch(validate(updateEmployees), controller.update);
 
 router
   .route('/list')
@@ -97,7 +97,6 @@ router
    * @apiError (Forbidden 403)     Forbidden        Only admins can create the data
    */
   .post(validate(listEmployees), controller.list);
-
 
 
 module.exports = router;

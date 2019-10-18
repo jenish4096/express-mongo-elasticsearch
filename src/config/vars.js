@@ -6,9 +6,9 @@ require('dotenv-safe').load({
   sample: path.join(__dirname, '../../.env.example'),
 });
 
-let defaultESMapping = {
-   type: 'text',
-}
+const defaultESMapping = {
+  type: 'text',
+};
 
 module.exports = {
   env: process.env.NODE_ENV,
@@ -34,9 +34,9 @@ module.exports = {
           address: defaultESMapping,
           gender: defaultESMapping,
           age: defaultESMapping,
-          maritalStatus: defaultESMapping
-        }
-      }
-    } 
-  }
+          maritalStatus: defaultESMapping,
+        },
+      },
+    },
+  },
 };

@@ -2,8 +2,12 @@ const _ = require('lodash');
 const { esConfig } = require('../../config/vars');
 const esService = require('../services/esService');
 
+async function prepareObject(result) {
+  return result.map(obj => obj._source);
+}
+
 exports.insertEmployees = async (employees) => {
-  let bodyObject = _.pick(employees, [
+  const bodyObject = _.pick(employees, [
     'firstName',
     'lastName',
     'designation',
@@ -14,13 +18,13 @@ exports.insertEmployees = async (employees) => {
     'age',
     'maritalStatus',
   ]);
-  let body = {
+  const body = {
     id: employees._id.toHexString(),
     indexName: esConfig.indexName,
-    body: bodyObject
-  }
-  return await esService.indexDocument(body);
-}
+    body: bodyObject,
+  };
+  return esService.indexDocument(body);
+};
 
 exports.listEmployees = async ({ term, page = 1, perPage = 10 }) => {
   let query;
@@ -28,21 +32,20 @@ exports.listEmployees = async ({ term, page = 1, perPage = 10 }) => {
   const limit = perPage;
   if (!term) {
     query = {
-      "query": {
-        "match_all": {}
-      }
-    }
-  }
-  else {
+      query: {
+        match_all: {},
+      },
+    };
+  } else {
     query = {
-      "query": {
-        "multi_match": {
-          "query": term,
-          "type": "phrase_prefix",
-          "fields": ["firstName", "lastName", 'age', 'salary', 'gender', 'designation', 'maritalStatus', 'dateOfJoining', 'address']
-        }
-      }
-    }
+      query: {
+        multi_match: {
+          query: term,
+          type: 'phrase_prefix',
+          fields: ['firstName', 'lastName', 'age', 'salary', 'gender', 'designation', 'maritalStatus', 'dateOfJoining', 'address'],
+        },
+      },
+    };
   }
   const options = {
     indexName: esConfig.indexName,
@@ -52,13 +55,8 @@ exports.listEmployees = async ({ term, page = 1, perPage = 10 }) => {
       query: query.query,
     },
   };
-  let { hits } = await esService.search(options);
-  let { count } = await esService.countDocuments(query);
-  let data = await prepareObject(hits.hits);
-  console.log(data)
-  return { count, data }
-}
-
-async function prepareObject(result) {
-  return await result.map(obj => obj._source)
-}
+  const { hits } = await esService.search(options);
+  const { count } = await esService.countDocuments(query);
+  const data = await prepareObject(hits.hits);
+  return { count, data };
+};
