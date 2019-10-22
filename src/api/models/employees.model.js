@@ -52,7 +52,7 @@ const employeesSchema = new mongoose.Schema({
   maritalStatus: {
     type: String,
     trim: true,
-  }
+  },
 }, {
   timestamps: true,
 });
@@ -63,7 +63,7 @@ const employeesSchema = new mongoose.Schema({
  * - validations
  * - virtuals
  */
-employeesSchema.pre('save', async function save(next) {
+employeesSchema.pre('save', async (next) => {
   try {
     // Do some thing hese
     return next();
@@ -163,7 +163,7 @@ employeesSchema.statics = {
     }
     return error;
   },
-}
+};
 /**
  * @typedef Employees
  */

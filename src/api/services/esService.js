@@ -1,5 +1,5 @@
 const elasticsearch = require('elasticsearch');
-const {esConfig} = require('../../config/vars');
+const { esConfig } = require('../../config/vars');
 
 const elasticClient = new elasticsearch.Client({
   host: process.env.ES_HOST,
@@ -18,7 +18,7 @@ exports.checkConnection = async () => {
   }
 };
 
-exports.indexExists = async indexName => {
+exports.indexExists = async (indexName) => {
   try {
     return elasticClient.indices.exists({
       index: indexName,
@@ -39,7 +39,7 @@ exports.initIndexWithMapping = async (indexName, payload) => {
   }
 };
 
-exports.indexDocument = async query => {
+exports.indexDocument = async (query) => {
   try {
     return elasticClient.index({
       index: query.indexName,
@@ -52,7 +52,7 @@ exports.indexDocument = async query => {
   }
 };
 
-exports.search = async query => {
+exports.search = async (query) => {
   try {
     return elasticClient.search({
       index: query.indexName,
@@ -65,7 +65,7 @@ exports.search = async query => {
   }
 };
 
-exports.updateDocument = async query => {
+exports.updateDocument = async (query) => {
   try {
     return elasticClient.update({
       index: query.indexName,
@@ -80,7 +80,7 @@ exports.updateDocument = async query => {
   }
 };
 
-exports.deleteDocument = async query => {
+exports.deleteDocument = async (query) => {
   try {
     return elasticClient.delete({
       index: query.indexName,
@@ -92,7 +92,7 @@ exports.deleteDocument = async query => {
   }
 };
 
-exports.BulkIndex = async body => {
+exports.BulkIndex = async (body) => {
   try {
     return elasticClient.bulk({
       index: esConfig.indexName,
@@ -104,7 +104,7 @@ exports.BulkIndex = async body => {
   }
 };
 
-exports.countDocuments = async query => {
+exports.countDocuments = async (query) => {
   try {
     return elasticClient.count({
       index: esConfig.indexName,

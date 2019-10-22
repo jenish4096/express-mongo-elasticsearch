@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const employeesRoutes = require('./employees.route');
 const esService = require('../../services/esService');
+
 const router = express.Router();
 /**
  * GET v1/status
@@ -13,7 +14,7 @@ router.get('/status', async (req, res) => {
     elastic: esStatus.cluster_name ? 'Connected to server.' : 'Not connected to server',
     version: process.env.VERSION,
   });
-})
+});
 
 /**
  * GET v1/docs

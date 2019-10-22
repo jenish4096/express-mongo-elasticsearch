@@ -13,26 +13,10 @@ const Employees = require('../employees.model');
 const employeesData = require('../jsonData/employees.json');
 const esService = require('../../services/esService');
 
-async function insertEmployees(employeesData) {
-  let data = await Employees.insertMany(employeesData);
-  await bulkInsertInEs(data);
-}
-
-async function bulkInsertInEs(esData) {
-  try {
-    let esObject = await prepareObject(esData);
-    await esService.BulkIndex(esObject);
-    mongoose.disconnect();
-  } catch (error) {
-    console.log(error);
-    console.error(':::::error: catch block error:::::');
-  }
-}
-
 async function prepareObject(employees) {
-  let string = '';
-  let esObject = employees.map(emp => {
-    let bodyObject = _.pick(emp, [
+  const string = '';
+  const esObject = employees.map((emp) => {
+    const bodyObject = _.pick(emp, [
       'firstName',
       'lastName',
       'designation',
@@ -42,14 +26,83 @@ async function prepareObject(employees) {
       'age',
       'maritalStatus',
     ]);
-    console.log('bodyObject) ', bodyObject)
-    let indexObject = {
+    console.log('bodyObject) ', bodyObject);
+    const indexObject = {
       index: {
         _id: emp._id,
       },
     };
     return (
-      string + `${JSON.stringify(indexObject)}\n${JSON.stringify(bodyObject)}\n`
+      `${string}${JSON.stringify(indexObject)}\n${JSON.stringify(bodyObject)}\n`
+    );
+  });
+  return esObject;
+}
+
+async function prepareObject(employees) {
+  const string = '';
+  const esObject = employees.map((emp) => {
+    const bodyObject = _.pick(emp, [
+      'firstName',
+      'lastName',
+      'designation',
+      'salary',
+      'dateOfJoining',
+      'address',
+      'age',
+      'maritalStatus',
+    ]);
+    console.log('bodyObject) ', bodyObject);
+    const indexObject = {
+      index: {
+        _id: emp._id,
+      },
+    };
+    return (
+      `${string}${JSON.stringify(indexObject)}\n${JSON.stringify(bodyObject)}\n`
+    );
+  });
+  return esObject;
+}
+
+async function bulkInsertInEs(esData) {
+  try {
+    const esObject = await prepareObject(esData);
+    await esService.BulkIndex(esObject);
+    mongoose.disconnect();
+  } catch (error) {
+    console.log(error);
+    console.error(':::::error: catch block error:::::');
+  }
+}
+
+async function insertEmployees(employeesData) {
+  const data = await Employees.insertMany(employeesData);
+  await bulkInsertInEs(data);
+}
+
+
+async function prepareObject(employees) {
+  const string = '';
+  const esObject = employees.map((emp) => {
+    const bodyObject = _.pick(emp, [
+      'firstName',
+      'lastName',
+      'designation',
+      'salary',
+      'dateOfJoining',
+      'address',
+      'age',
+      'maritalStatus',
+    ]);
+    console.log('bodyObject) ', bodyObject);
+    const indexObject = {
+      index: {
+        _id: emp._id,
+      },
+    };
+    return (
+      `${string}${JSON.stringify(indexObject)}\n${JSON.stringify(bodyObject)}\n`
     );
   });
   return esObject;

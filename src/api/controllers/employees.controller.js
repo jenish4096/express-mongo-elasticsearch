@@ -11,11 +11,11 @@ exports.create = async (req, res, next) => {
   try {
     const employees = new Employees(req.body);
     const savedEmployees = await employees.save();
-    await insertEmployees(savedEmployees)
+    await insertEmployees(savedEmployees);
     res.status(httpStatus.CREATED);
     res.json(savedEmployees.transform());
   } catch (error) {
-    console.log(error)
+    console.log(error);
     next(error);
   }
 };
@@ -36,9 +36,9 @@ exports.update = (req, res, next) => {
 
 exports.list = async (req, res, next) => {
   try {
-    let { count, data } = await listEmployees(req.body);
-    res.json({ count, data })
+    const { count, data } = await listEmployees(req.body);
+    res.json({ count, data });
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
