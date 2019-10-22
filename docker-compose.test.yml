@@ -1,6 +1,6 @@
 version: "3"
 services:
-  nins_backend:
+  backend:
     container_name: nodejs
     restart: always
     build: ./
