@@ -3,7 +3,7 @@ const {esConfig} = require('../../config/vars');
 
 const elasticClient = new elasticsearch.Client({
   host: process.env.ES_HOST,
-  // log: process.env.NODE_ENV === 'development' ? 'trace' : 'debug',
+  log: process.env.NODE_ENV === 'development' ? 'trace' : 'debug',
 });
 
 const docType = '_doc';
